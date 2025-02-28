@@ -14,6 +14,17 @@ type Task struct {
 	Duedate time.Time
 	completed bool
 }
+type toDoMangager interface{
+  deleteTheTask(taskID int)error
+  addingTheTask(task string , dueDate time.Time)error
+  completedTheTask(taskID int)
+  getTheData()
+  
+}
+type TaskManager struct{
+ tasks []Task
+ taskID int
+}
 // CustomReader is a wrapper around bufio.Reader
 type CustomReader struct {
 	*bufio.Reader
@@ -49,24 +60,24 @@ func (r *CustomReader) inputTheData() (string, time.Time) {
 
 	return tsk, duedate
 }
-func addingTheTask(tasks *[]Task, taskID *int, task string, duedate time.Time) {
-	*taskID++
+func (tm *TaskManager) addingTheTask(task string, duedate time.Time) {
+	tm.taskID++
 	newTask := Task{
-		ID:      *taskID,
+		ID:      tm.taskID,
 		Title:   task,
 		Duedate: duedate,
 	}
-	*tasks = append(*tasks, newTask)
+	tm.tasks = append(tm.tasks, newTask)
 }
 // getTheData function to display the list of tasks in a table format
-func getTheData(tasks []Task) {
+func (tm *TaskManager) getTheData() {
 	println()
 	// Print header
 	fmt.Printf("| %-4s | %-25s | %-12s | %-15s |\n", "ID", "Task", "Due Date", "Status")
 	fmt.Println("|------|---------------------------|--------------|-----------------|")
 
 	// Print each task
-	for _, task := range tasks {
+	for _, task := range tm.tasks {
 		completedStatus := "Not Completed"
 		if task.completed {
 			completedStatus = "Completed"
@@ -77,10 +88,10 @@ func getTheData(tasks []Task) {
 }
 
 //mark the task as completed when user enter as completed
-func completedTheTask(task *[]Task, taskId int) error {
-	for i, tasks := range *task{
+func (tm *TaskManager)completedTheTask(taskId int) error {
+	for i, tasks := range tm.tasks{
 		if taskId == tasks.ID{
-			(*task)[i].completed = true
+			(tm.tasks)[i].completed = true
 			return nil
 		}
 	}
@@ -88,19 +99,17 @@ func completedTheTask(task *[]Task, taskId int) error {
 } 
  
 //function to delete the task on user command
-func deleteTheTask(task *[]Task,taskId int) error  {
-	for i, tasks := range *task{
+func (tm *TaskManager) deleteTheTask(taskId int) error  {
+	for i, tasks := range tm.tasks{
 		if taskId == tasks.ID{
-			*task = append((*task)[:i], (*task)[i+1:]...)
+			tm.tasks = append((tm.tasks)[:i], (tm.tasks)[i+1:]...)
 			return nil
 		}
 	}
 	return fmt.Errorf("task with ID %d not found please check with id ", taskId)
 }
 func main() {
-	var tasks []Task
-	var taskID int
-
+	taskManager := &TaskManager{}
 	// Create a CustomReader to read user input
 	reader := &CustomReader{bufio.NewReader(os.Stdin)}
 	
@@ -110,7 +119,8 @@ func main() {
 		fmt.Println("2. Delete a task from the application")
 		fmt.Println("3. Mark a task as completed")
 		fmt.Println("4. Display the Task the ids and their status")
-		fmt.Println("5. Exit from the application\n")
+		fmt.Println("5. Exit from the application")
+		fmt.Println()
 	
 		var choice int
 		fmt.Scanln(&choice)
@@ -121,7 +131,7 @@ func main() {
 			task, duedate := reader.inputTheData()
 
 			// Add task to the list
-			addingTheTask(&tasks, &taskID, task, duedate)
+			taskManager.addingTheTask(task, duedate)
 
 		case 2:
 			// Ask for the task ID to delete
@@ -130,7 +140,7 @@ func main() {
 			fmt.Scanln(&taskIDToDelete)
 
 			// Try deleting the task
-			err := deleteTheTask(&tasks, taskIDToDelete)
+			err := taskManager.deleteTheTask(taskIDToDelete)
 			if err != nil {
 				fmt.Println(err)
 			} else {
@@ -143,7 +153,7 @@ func main() {
 			fmt.Scanln(&taskIDToComplete)
 
 			// Try marking the task as completed
-			err := completedTheTask(&tasks, taskIDToComplete)
+			err := taskManager.completedTheTask(taskIDToComplete)
 			if err != nil {
 				fmt.Println(err)
 			} else {
@@ -153,7 +163,7 @@ func main() {
 		case 4:
 			//to display the  task with updated status
 			fmt.Println("Updated  To-Do List with task id and status")
-			getTheData(tasks)
+			taskManager.getTheData()
 		case 5:
 			fmt.Println("Thank You for choosing us")
 			return
