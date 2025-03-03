@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"strings"
 	"time"
-	
 )
 
 // CustomReader struct for reading user input
@@ -30,13 +29,15 @@ func (r *CustomReader) InputData() (string, time.Time, error) {
 		// Parse the due date
 		parsedDate, err := time.Parse("2006-01-02", dueDateStr)
 		if err != nil {
-			return "", time.Time{}, fmt.Errorf("invalid date format. Use YYYY-MM-DD")
+			fmt.Println("Invalid date format. Please use YYYY-MM-DD format.")
+			continue // Ask again if date format is invalid
 		}
 		if parsedDate.Before(time.Now()) {
-			return "", time.Time{}, fmt.Errorf("due date must be in the future")
+			fmt.Println("Due date must be in the future. Please enter a valid date.")
+			continue // Ask again if the due date is in the past
 		}
 		dueDate = parsedDate
-		break
+		break // Exit the loop when a valid date is entered
 	}
 
 	return taskTitle, dueDate, nil
