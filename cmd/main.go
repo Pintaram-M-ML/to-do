@@ -5,6 +5,8 @@ import (
 	"log"
 	"todo-app/internal/input"
 	"todo-app/internal/task"
+	"bufio"
+	"os"
 )
 
 func main() {
@@ -12,7 +14,8 @@ func main() {
 	taskManager := &task.TaskManager{}
 
 	// Create a CustomReader for reading user input
-	reader := &input.CustomReader{}
+	reader := &input.CustomReader{Reader: bufio.NewReader(os.Stdin)}
+
 
 	for {
 		// Show options
