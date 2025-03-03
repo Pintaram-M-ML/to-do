@@ -15,12 +15,14 @@ type Task struct {
 	completed bool
 }
 type toDoMangager interface{
+  inputTheData()(string ,time.Time)
   deleteTheTask(taskID int)error
   addingTheTask(task string , dueDate time.Time)error
   completedTheTask(taskID int)
   getTheData()
   
 }
+//this structure implements the interface 
 type TaskManager struct{
  tasks []Task
  taskID int
