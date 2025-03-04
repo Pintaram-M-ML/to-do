@@ -8,7 +8,7 @@ import (
 	"sync"
 	"todo-app/internal/input"
 	"todo-app/internal/task"
-     
+
 )
 
 func main() {
@@ -45,9 +45,7 @@ func main() {
 					err := taskManager.AddTask(taskTitle, dueDate)
 				if err != nil {
 					log.Println("Error adding task:", err)
-				} else {
-					fmt.Println("Task added successfully!")
-				}
+				} 
 				}()
 				
 			}
@@ -57,21 +55,25 @@ func main() {
 			fmt.Print("Enter the Task ID to delete: ")
 			var taskIDToDelete int
 			fmt.Scanln(&taskIDToDelete)
-			
+			//channel can be used instead of wait.group but main thread will wait untill the goroutine 
+			//thread task is completed so we can used wait.group
+			//In this code we don't need any channel creation 
+			//basically channel is used for communication between the goroutine
+			//channel creation
+			//ch :=make(chan string)
 			wg.Add(1)
 			go func() {
 				defer wg.Done()
+				//passing the channel message as "done" from goroutine  thread to main thread  
+				//ch<-"done"
 				err := taskManager.DeleteTask(taskIDToDelete)
 				if err != nil {
 					log.Println("Error:", err)
-				} else {
-	
-					fmt.Println("Task deleted successfully!")
 				}
 			}()
-
-			
-
+			// receiveing the "done" message from goroutine thread to main thread
+			//<-ch
+					
 		case 3:
 			// Mark task as completed
 			fmt.Print("Enter the Task ID to mark as completed: ")
@@ -83,9 +85,7 @@ func main() {
 				err := taskManager.CompleteTask(taskIDToComplete)
 			if err != nil {
 				log.Println("Error:", err)
-			} else {
-				fmt.Println("Task marked as completed!")
-			}
+			} 
 			}()
 			
 
