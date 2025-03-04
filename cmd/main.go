@@ -1,12 +1,13 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"log"
+	"os"
 	"todo-app/internal/input"
 	"todo-app/internal/task"
-	"bufio"
-	"os"
+     
 )
 
 func main() {
@@ -35,13 +36,14 @@ func main() {
 			taskTitle, dueDate, err := reader.InputData()
 			if err != nil {
 				log.Println("Error:", err)
-			} else {
+			} else {	
 				err := taskManager.AddTask(taskTitle, dueDate)
 				if err != nil {
 					log.Println("Error adding task:", err)
 				} else {
 					fmt.Println("Task added successfully!")
-				}
+				}			
+				
 			}
 
 		case 2:
@@ -49,24 +51,25 @@ func main() {
 			fmt.Print("Enter the Task ID to delete: ")
 			var taskIDToDelete int
 			fmt.Scanln(&taskIDToDelete)
-			err := taskManager.DeleteTask(taskIDToDelete)
-			if err != nil {
-				log.Println("Error:", err)
-			} else {
-				fmt.Println("Task deleted successfully!")
-			}
+				err := taskManager.DeleteTask(taskIDToDelete)
+				if err != nil {
+					log.Println("Error:", err)
+				} else {
+	
+					fmt.Println("Task deleted successfully!")
+				}		
 
 		case 3:
 			// Mark task as completed
 			fmt.Print("Enter the Task ID to mark as completed: ")
 			var taskIDToComplete int
 			fmt.Scanln(&taskIDToComplete)
-			err := taskManager.CompleteTask(taskIDToComplete)
+				err := taskManager.CompleteTask(taskIDToComplete)
 			if err != nil {
 				log.Println("Error:", err)
 			} else {
 				fmt.Println("Task marked as completed!")
-			}
+			}		
 
 		case 4:
 			// Display tasks
