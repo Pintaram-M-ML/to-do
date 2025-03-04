@@ -2,6 +2,7 @@ package task
 
 import (
 	"fmt"
+	"sync"
 	"time"
 )
 
@@ -9,10 +10,13 @@ import (
 type TaskManager struct {
 	tasks   []Task
 	taskID  int
+	mut sync.Mutex
 }
 
 // AddTask adds a task to the TaskManager
 func (tm *TaskManager) AddTask(title string, dueDate time.Time) error {
+	tm.mut.Lock()
+	defer tm.mut.Unlock()
 	tm.taskID++
 	newTask := Task{
 		ID:      tm.taskID,
@@ -25,11 +29,15 @@ func (tm *TaskManager) AddTask(title string, dueDate time.Time) error {
 
 // GetTasks returns all tasks
 func (tm *TaskManager) GetTasks() []Task {
+	tm.mut.Lock()
+	defer tm.mut.Unlock()
 	return tm.tasks
 }
 
 // CompleteTask marks a task as completed
 func (tm *TaskManager) CompleteTask(taskID int) error {
+	tm.mut.Lock()
+	defer tm.mut.Unlock()
 	for i, task := range tm.tasks {
 		if task.ID == taskID {
 			tm.tasks[i].Completed = true
@@ -41,6 +49,8 @@ func (tm *TaskManager) CompleteTask(taskID int) error {
 
 // DeleteTask deletes a task from the task list
 func (tm *TaskManager) DeleteTask(taskID int) error {
+	tm.mut.Lock()
+	defer tm.mut.Unlock()
 	for i, task := range tm.tasks {
 		if task.ID == taskID {
 			tm.tasks = append(tm.tasks[:i], tm.tasks[i+1:]...)
