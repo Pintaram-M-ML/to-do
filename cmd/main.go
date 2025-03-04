@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sync"
 	"todo-app/internal/input"
 	"todo-app/internal/task"
      
@@ -13,7 +14,8 @@ import (
 func main() {
 	// Initialize TaskManager
 	taskManager := &task.TaskManager{}
-
+	//variable for waitGroup which is used wait till all the goroutine completed
+    var wg sync.WaitGroup
 	// Create a CustomReader for reading user input
 	reader := &input.CustomReader{Reader: bufio.NewReader(os.Stdin)}
 
@@ -36,13 +38,17 @@ func main() {
 			taskTitle, dueDate, err := reader.InputData()
 			if err != nil {
 				log.Println("Error:", err)
-			} else {	
-				err := taskManager.AddTask(taskTitle, dueDate)
+			} else {
+				wg.Add(1)
+				go func() {
+					defer wg.Done()
+					err := taskManager.AddTask(taskTitle, dueDate)
 				if err != nil {
 					log.Println("Error adding task:", err)
 				} else {
 					fmt.Println("Task added successfully!")
-				}			
+				}
+				}()
 				
 			}
 
@@ -51,25 +57,37 @@ func main() {
 			fmt.Print("Enter the Task ID to delete: ")
 			var taskIDToDelete int
 			fmt.Scanln(&taskIDToDelete)
+			
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
 				err := taskManager.DeleteTask(taskIDToDelete)
 				if err != nil {
 					log.Println("Error:", err)
 				} else {
 	
 					fmt.Println("Task deleted successfully!")
-				}		
+				}
+			}()
+
+			
 
 		case 3:
 			// Mark task as completed
 			fmt.Print("Enter the Task ID to mark as completed: ")
 			var taskIDToComplete int
 			fmt.Scanln(&taskIDToComplete)
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
 				err := taskManager.CompleteTask(taskIDToComplete)
 			if err != nil {
 				log.Println("Error:", err)
 			} else {
 				fmt.Println("Task marked as completed!")
-			}		
+			}
+			}()
+			
 
 		case 4:
 			// Display tasks
@@ -78,6 +96,7 @@ func main() {
 
 		case 5:
 			// Exit
+			wg.Wait()
 			fmt.Println("Thank you for using the To-Do list application!")
 			return
 
