@@ -46,6 +46,19 @@ func (tm *TaskManager) CompleteTask(taskID int) error {
 	}
 	return fmt.Errorf("task with ID %d not found", taskID)
 }
+// GetTaskByID returns a task by its ID
+func (tm *TaskManager) GetTaskByID(id int) (*Task, error) {
+	tm.mut.Lock()
+	defer tm.mut.Unlock()
+
+	for _, task := range tm.tasks {
+		if task.ID == id {
+			return &task, nil
+		}
+	}
+	return nil, fmt.Errorf("task with ID %d not found", id)
+}
+
 
 // DeleteTask deletes a task from the task list
 func (tm *TaskManager) DeleteTask(taskID int) error {
