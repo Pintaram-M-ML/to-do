@@ -19,12 +19,15 @@ func (tm *TaskManager) AddTask(title string) error {
 	tm.taskID++
 	newTask := Task{
 		ID:      tm.taskID,
-		Title:   title,
+		Title: title,
 	
 	}
 	tm.tasks = append(tm.tasks, newTask)
 	return nil
 }
+
+
+
 
 // GetTasks returns all tasks
 func (tm *TaskManager) GetTasks() []Task {
