@@ -45,7 +45,7 @@ func HandleTask(w http.ResponseWriter, r *http.Request) {
 			//it will throw 400 bad request if error else 200 success 
 			http.Error(w,"Invalid Input", http.StatusBadRequest)
 		}
-		error:=taskManager.AddTask(newTask.Title,newTask.DueDate)
+		error:=taskManager.AddTask(newTask.Title)
 		if error!=nil{
 			//StatusInternalServerError return the 500 bad request that it is error from server side 
 			//err.Error()  return the error but in string fomrat

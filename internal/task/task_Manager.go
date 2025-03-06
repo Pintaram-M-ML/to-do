@@ -3,7 +3,6 @@ package task
 import (
 	"fmt"
 	"sync"
-	"time"
 )
 
 // TaskManager struct to hold tasks
@@ -14,14 +13,14 @@ type TaskManager struct {
 }
 
 // AddTask adds a task to the TaskManager
-func (tm *TaskManager) AddTask(title string, dueDate time.Time) error {
+func (tm *TaskManager) AddTask(title string) error {
 	tm.mut.Lock()
 	defer tm.mut.Unlock()
 	tm.taskID++
 	newTask := Task{
 		ID:      tm.taskID,
 		Title:   title,
-		DueDate: dueDate,
+	
 	}
 	tm.tasks = append(tm.tasks, newTask)
 	return nil
@@ -76,13 +75,13 @@ func (tm *TaskManager) DeleteTask(taskID int) error {
 // PrintTasks prints all tasks in a formatted table
 func PrintTasks(tasks []Task) {
 	fmt.Println("\nTask List:")
-	fmt.Printf("| %-4s | %-25s | %-12s | %-15s |\n", "ID", "Task", "Due Date", "Status")
+	fmt.Printf("| %-4s | %-25s | %-15s |\n", "ID", "Task", "Status")
 	fmt.Println("|------|---------------------------|--------------|-----------------|")
 	for _, task := range tasks {
 		status := "Not Completed"
 		if task.Completed {
 			status = "Completed"
 		}
-		fmt.Printf("| %-4d | %-25s | %-12s | %-15s |\n", task.ID, task.Title, task.DueDate.Format("2006-01-02"), status)
+		fmt.Printf("| %-4d | %-25s | %-12s | %-15s |\n", task.ID, task.Title,status)
 	}
 }
