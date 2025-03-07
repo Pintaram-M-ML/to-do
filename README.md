@@ -14,13 +14,6 @@ Task Management:
 - Logging Middleware: Logs incoming requests for debugging and monitoring.
 - Concurrency: Uses Goroutines and WaitGroups to handle tasks asynchronously.
 
-## Technologies Used
-
-- Go (Golang)
-- HTTP Handlers
-- Goroutines and WaitGroups for concurrency
-- JSON for data exchange
-
 ## Getting Started with To Do application
 
 ### Prerequisites
@@ -69,41 +62,6 @@ Before running the application, ensure you have Go installed on your system.
 - DELETE `/tasks/{taskID}`: Delete a task by its ID.
   - Response: Status message indicating success.
 
-### Example Requests
-
-- Create a Task:  
-  Method: `POST`  
-  Endpoint: `/tasks`  
-  Request Body:
-  {
-    "title": "Complete Go Project"
-  }
-
-- Get All Tasks:  
-  Method: `GET`  
-  Endpoint: `/tasks`
-
-- Mark Task as Completed:  
-  Method: `PUT`  
-  Endpoint: `/tasks/1`
-
-- Delete Task:  
-  Method: `DELETE`  
-  Endpoint: `/tasks/1`
-
-### Authentication
-
-To access the endpoints, you need to provide a username and password using Basic Authentication.
-
-- Username: `admin`
-- Password: `password123`
-
-This can be added in the HTTP header as follows:
-
-Authorization: Basic <base64-encoded-username:password>
-
-
-For example, you can use Postman to send a request with the header set as `Authorization: Basic YWRtaW46cGFzc3dvcmQxMjM=` (which is the base64 encoding of `admin:password123`).
 
 ## Concurrency
 

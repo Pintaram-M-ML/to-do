@@ -75,16 +75,16 @@ func (tm *TaskManager) DeleteTask(taskID int) error {
 	return fmt.Errorf("task with ID %d not found", taskID)
 }
 
-// PrintTasks prints all tasks in a formatted table
-func PrintTasks(tasks []Task) {
-	fmt.Println("\nTask List:")
-	fmt.Printf("| %-4s | %-25s | %-15s |\n", "ID", "Task", "Status")
-	fmt.Println("|------|---------------------------|--------------|-----------------|")
-	for _, task := range tasks {
-		status := "Not Completed"
-		if task.Completed {
-			status = "Completed"
-		}
-		fmt.Printf("| %-4d | %-25s | %-12s | %-15s |\n", task.ID, task.Title,status)
-	}
-}
+// // PrintTasks prints all tasks in a formatted table
+// func PrintTasks(tasks []Task) {
+// 	fmt.Println("\nTask List:")
+// 	fmt.Printf("| %-4s | %-25s | %-15s |\n", "ID", "Task", "Status")
+// 	fmt.Println("|------|---------------------------|--------------|-----------------|")
+// 	for _, task := range tasks {
+// 		status := "Not Completed"
+// 		if task.Completed {
+// 			status = "Completed"
+// 		}
+// 		fmt.Printf("| %-4d | %-25s | %-12s | %-15s |\n", task.ID, task.Title,status)
+// 	}
+// }
