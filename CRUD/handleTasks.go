@@ -52,6 +52,7 @@ func HandleTask(w http.ResponseWriter, r *http.Request) {
 				//it will throw 400 bad request if error else 200 success
 				http.Error(w, "Invalid Input", http.StatusBadRequest)
 			}
+			fmt.Printf("Decoded task: %+v\n", newTask) 
 			error := taskManager.AddTask(newTask.Title)
 			if error != nil {
 				//StatusInternalServerError return the 500 bad request that it is error from server side
@@ -64,7 +65,7 @@ func HandleTask(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusCreated)
 		}()
 		fmt.Fprintf(w, "Task created successfully")
-
+		wg.Wait()
 	default:
 		//if method an client is rquested is not found
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
@@ -134,6 +135,7 @@ func HandleTaskByID(w http.ResponseWriter, r *http.Request) {
 	default:
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 	}
+	wg.Wait()
 }
 
 //manual crud operation
