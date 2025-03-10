@@ -3,6 +3,7 @@ package Testing
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -35,6 +36,7 @@ func TestAddTask(t *testing.T) {
 
 	// Decode the response body to check if the task was added
 	var response map[string]string
+	fmt.Println(rr.Body)
 	if err := json.NewDecoder(rr.Body).Decode(&response); err != nil {
 		t.Fatal(err)
 	}

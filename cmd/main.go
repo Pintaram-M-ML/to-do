@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"todo-app/Authentication"
-	crud "todo-app/CRUD"
+	"todo-app/CRUD"
 )
 
 func main() {
