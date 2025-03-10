@@ -63,8 +63,11 @@ func HandleTask(w http.ResponseWriter, r *http.Request) {
 			}
 			//it writes the status code
 			w.WriteHeader(http.StatusCreated)
+			response := map[string]string{"message": "Task created successfully"}
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(response)
 		//}()
-		fmt.Fprintf(w, "Task created successfully")
+		//fmt.Fprintf(w, "Task created successfully")
 		//wg.Wait()
 	default:
 		//if method an client is rquested is not found
